@@ -61,7 +61,7 @@ namespace WpfDirectorySizer
 
             // So that the UI thread won't block and freeze the Window
             model.Size = await Calculator.CalculateSizeAsync(
-                model.Path, model.TokenSource, progress
+                model.Path, model.TokenSource.Token, progress
             );
 
             UpdateTotalSize();

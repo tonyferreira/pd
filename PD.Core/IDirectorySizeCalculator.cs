@@ -14,7 +14,7 @@ namespace PD.Core
         /// </summary>
         /// <param name="directoryPath"></param>
         /// <returns></returns>
-        Task<long> CalculateSizeAsync(string directoryPath, CancellationTokenSource tokenSource, IProgress<long> progress);
+        Task<long> CalculateSizeAsync(string directoryPath, CancellationToken token, IProgress<long> progress);
     }
 
 }

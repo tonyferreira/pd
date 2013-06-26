@@ -14,12 +14,12 @@ namespace PD.ConsoleApplication
 
         //TODO: Retrieve configuration delegates from IoC container.
 
-        private static readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
+        private static readonly CancellationToken token = new CancellationTokenSource().Token;
 
         private static readonly Progress<long> progressCallback = new Progress<long>(/* do nothing for now */);
 
         // Function delegate used to calculate size of directory
-        private static readonly Func<string, CancellationTokenSource, IProgress<long>, Task<long>> calculate =
+        private static readonly Func<string, CancellationToken, IProgress<long>, Task<long>> calculate =
             new PfxDirectorySizeCalculator(ExceptionHandler).CalculateSizeAsync;
 
         static void Main(string[] args)
@@ -69,7 +69,7 @@ namespace PD.ConsoleApplication
 
             // Create the tasks to run in parallel in a scatter/gather pattern.
             var calculationTasks = directories.Select(
-                async dir => await calculate(dir, tokenSource, progressCallback)
+                async dir => await calculate(dir, token, progressCallback)
             );
 
             // Wait for Tasks to complete, then join them back together, summing the result from each.

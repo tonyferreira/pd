@@ -29,10 +29,8 @@ namespace PD.Core
         }
 
         // Calculate the size of the supplied directory recursively
-        public long CalculateSize(string directoryPath, CancellationTokenSource tokenSource, IProgress<long> progress)
+        public long CalculateSize(string directoryPath, CancellationToken token, IProgress<long> progress)
         {
-            var token = tokenSource.Token;
-
             if (string.IsNullOrWhiteSpace(directoryPath))
                 throw new ArgumentNullException("directoryPath");
 
@@ -91,7 +89,7 @@ namespace PD.Core
                             return 0;
 
                         options.CancellationToken.ThrowIfCancellationRequested();
-                        subtotal += this.CalculateSize(directories[i].FullName, tokenSource, progress);
+                        subtotal += this.CalculateSize(directories[i].FullName, token, progress);
                         return subtotal;
                     },
                     // Add local total to grand total (size)
@@ -124,10 +122,10 @@ namespace PD.Core
 
 
         // Allows for async/await pattern
-        public Task<long> CalculateSizeAsync(string directoryPath, CancellationTokenSource tokenSource, IProgress<long> progress)
+        public Task<long> CalculateSizeAsync(string directoryPath, CancellationToken token, IProgress<long> progress)
         {
             // Delegate to synchronous method on background thread
-            return Task.Run(() => this.CalculateSize(directoryPath, tokenSource, progress));
+            return Task.Run(() => this.CalculateSize(directoryPath, token, progress));
         }
     }
 }
